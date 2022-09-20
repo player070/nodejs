@@ -32,6 +32,25 @@
       </div>
     </nav>
 
+
+    <form action="/add" method="post">
+      <table>
+        <tr>
+          <td>이름</td>
+          <td><input type="text" name="username"></td>
+        </tr>
+        <tr>
+          <td>성별</td>
+          <td><input type="radio" name="gender" value="m">남자 / <input type="radio" name="gender" value="f">여자</td>
+        </tr>
+        <tr>
+          <td>이메일주소</td>
+          <td><input type="text" name="e_id">@<select name="e_address"><option value="1">naver</option><option value="2">google</option></select></td>
+        </tr>
+      </table>
+      <button type="submit">send</button>
+    </form>
+
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->

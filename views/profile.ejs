@@ -8,12 +8,16 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+
     <title>Hello, world!</title>
   </head>
   <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="/">Todo App</a>
+      <a class="navbar-brand" href="/">meta world</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -23,28 +27,58 @@
             <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="./write">Write</a>
+            <a class="nav-link" href="/signin">sign in</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/list">list</a>
+            <a class="nav-link" href="/profile">my profile</a>
           </li>
         </ul>
       </div>
     </nav>
 
-    <div class="container mt-3">
-      <form action="/add" method="POST">
-        <div class="form-group">
-          <label>title명</label>
-          <input type="text" class="form-control" name="title">
-        </div>
-        <div class="form-group">
-          <label>date명</label>
-          <input type="text" class="form-control" name="date">
-        </div>
-        <button type="submit" class="btn btn-outline-danger">Submit</button>
-      </form>
-    </div>
+
+    <% for(let i = 0; i < profiles.length; i ++){ %>
+
+
+      <table>
+        <tr>
+          <td>이름</td>
+          <td><input type="text" name="username" value="<%= profiles[i].username %>"> </td>
+        </tr>
+        <tr>
+          <td>성별</td>
+          <td>
+            <input type="radio" name="gender<%= i %>" value="m" aria-label="<%= profiles[i].gender %>" >남자 / 
+            <input type="radio" name="gender<%= i %>" value="f" aria-label="<%= profiles[i].gender %>" >여자 
+          </td>
+        </tr>
+        <tr>
+          <td>이메일주소</td>
+          <td>
+            <input type="text" name="e_id" value=" <%= profiles[i].e_id %>">@
+            <select name="e_address">
+              <option value="1" fncompare(1,1,selected)>naver</option>
+              <option value="2" fncompare(1,2,selected)>google</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+      <br>
+    <% } %>
+
+
+    <script>
+      $(document).ready(function(){
+        $('input[type="radio"]').each(function(){
+          if($(this).attr('value') == $(this).attr('aria-label')){
+            $(this).prop('checked', true);
+          };
+        })
+      })
+    </script>
+    
+
+
 
     <!-- Optional JavaScript; choose one of the two! -->
 
@@ -58,5 +92,6 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
     -->
+
   </body>
 </html>
