@@ -1,136 +1,52 @@
-// const express = require('express');
-// const app = express();
-
-// const bodyParser = require('body-parser'); //서버요청을 쉽게 꺼내서 쓸 수 있는 라이브러리. 
-// app.use(bodyParser.urlencoded({extended : true})); // ↑사용하기. 
-
-// app.set('view engine','ejs')
-
-
-// // mongoDB접속
-// const MongoClient = require('mongodb').MongoClient;
-// var db;
-// MongoClient.connect('mongodb+srv://qjin:Gorillaz-66@cluster0.xaphkkg.mongodb.net/?retryWrites=true&w=majority',function(에러, client){
-  
-//   if(에러){return console.log(에러)};
-
-//   db = client.db('todoapp'); //todoapp 이라는 database 폴더에 연결한다
-
-//   app.listen(8080, function(){
-//     console.log("listening on 8080")
-//   });
-
-// });
-// app.get('/',function(요청,응답){
-//   응답.sendFile(__dirname + '/index.html');
-// }); 
-
-// app.get('/write',function(요청,응답){
-//   응답.sendFile(__dirname + '/write.html');
-// });
-
-// app.post('/add', function(요청, 응답){
-//   응답.send('전송완료');
-//   db.collection('post').insertOne({
-//     제목 : 요청.body.title,
-//     날짜 : 요청.body.date
-//   }, function(에러, 결과){
-//     console.log('제목 : ' + 요청.body.title + ', 날짜 : ' + 요청.body.date);
-//   });
-// })
-
-// app.get('/list',function(요청, 응답){
-
-//   // db에 저장된 post collection 의 데이터를 꺼내달라. 
-//   db.collection('post').find().toArray(function(에러, 결과){
-//     응답.render('list.ejs', {posts : 결과});
-//   });
-// });
-
-// const express = require('express');
-// const app = express();
-// const bodyParser = require('body-parser');
-// app.use(bodyParser.urlencoded({extended:true}));
-// const MongoClient = require('mongodb').MongoClient;
-// var db;
-// MongoClient.connect('mongodb+srv://qjin:Gorillaz-66@cluster0.xaphkkg.mongodb.net/?retryWrites=true&w=majority',function(오류,client){
-//   db = client.db('todoapp');
-//   app.listen(8000, function(){
-//     console.log('connected 8000!');
-//   });
-// });
-// app.post('/add',function(요청,응답){
-//   db.collection('posttest').insertOne({
-//     username : 요청.body.username, 
-//     gender : 요청.body.gender,
-//     e_id : 요청.body.e_id, 
-//     e_address : 요청.body.e_address 
-//   },function(에러, 결과){
-//     if(!에러){
-//       응답.send('전송되었습니다.');
-//       console.log(요청.body);
-//     }else{
-//       console.log(에러)
-//     }
-//   })
-// })
-// app.get('/',function(요청,응답){
-//   응답.sendFile(__dirname + '/index.html');
-// })
-// app.get('/signin',function(요청,응답){
-//   응답.sendFile(__dirname + '/signin.html');
-// })
-// app.get('/profile',function(요청,응답){
-//   db.collection('posttest').find().toArray(function(에러,결과){
-//     응답.render('profile.ejs',{profiles : 결과});  
-//   })
-// })
-
-
-
 const express = require('express');
 const app = express();
-
 const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({extended : true})); //****** */
+app.use(bodyParser.urlencoded({extended : true}));
 app.set('view engine', 'ejs');
-
 const MongoClient = require('mongodb').MongoClient;
+var db;
 
-var db ; 
-MongoClient.connect('mongodb+srv://qjin:Gorillaz-66@cluster0.xaphkkg.mongodb.net/?retryWrites=true&w=majority', function(에러, client){
+MongoClient.connect('mongodb+srv://qjin:Gorillaz-66@cluster0.xaphkkg.mongodb.net/?retryWrites=true&w=majority',function(오류,client){
   db = client.db('todoapp');
-  app.listen(8080, function(){
-    console.log('connext 8080!');
+  app.listen(8080, function(){console.log('8008 connected!');});
+});
+
+app.get('/',function(요청,응답){응답.sendFile(__dirname + '/index.html')});
+app.get('/signin',function(요청,응답){응답.sendFile(__dirname + '/signin.html')});
+app.get('/write',function(요청,응답){응답.sendFile(__dirname + '/write.html')});
+
+
+
+
+app.post('/addProfile',function(요청,응답){
+  db.collection('counter').findOne({name:'회원수'},function(에러,결과){
+    var 회원수 = 결과.totalPost;
+    db.collection('posttest').insertOne({_id : 회원수 + 1 ,username : 요청.body.username, gender : 요청.body.gender, e_id : 요청.body.e_id, e_address : 요청.body.e_address},function(){
+      console.log('profile저장완료');
+    });
+    // counter라는 콜렉션에 있는 totalpost라는 항목도 1 증가시켜야한다.
+  });
+  응답.sendFile(__dirname + '/signin.html');
+});
+
+app.post('/addtodo',function(요청,응답){
+  db.collection('counter').findOne({name:'할일수'},function(에러,결과){
+    var 할일수 =  결과.totalTodo;
+    db.collection('post').insertOne({_id : 할일수 + 1 , 제목 : 요청.body.title, 날짜 : 요청.body.date},function(){
+      console.log('todo저장완료');
+    });
   });
 });
 
-app.get('/',function(요청, 응답){
-  // 응답.sendFile('index.html');
-  console.log('index');
-})
-app.get('/signin', function(요청, 응답){
-  응답.sendFile('/signin.html');
-  console.log('/signin.html');
-})
-app.post('/add',function(요청, 응답){
-  db.collection('posttest').add().insertOne({
-    username : body.username,
-    gender : body.gender,
-    e_id : body.e_id,
-    e_address : body.e_address
-  },function(){
-    console.log('add요청')
-  })
-  응답.send('요청완료..')
-})
-// app.get('/profile',function(요청, 응답){
-  
-//   //collecton 명이 posttest 인 db에서 모든 정보를 가져와주세요. 
-//   db.collection('posttest').???
-  
-  
-//   app.render('/profile.ejs', {});
 
-// })
+app.get('/list',function(요청,응답){
+  db.collection('post').find().toArray(function(에러,결과){
+    응답.render('list.ejs',{profiles : 결과});
+  });
+});
 
+app.get('/profile',function(요청,응답){
+  db.collection('posttest').find().toArray(function(에러,결과){
+    응답.render('profile.ejs',{profiles : 결과});
+  });
+});
