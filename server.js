@@ -21,7 +21,6 @@
 //   });
 
 // });
-ㅇ
 // app.get('/',function(요청,응답){
 //   응답.sendFile(__dirname + '/index.html');
 // }); 
@@ -32,7 +31,10 @@
 
 // app.post('/add', function(요청, 응답){
 //   응답.send('전송완료');
-//   db.collection('post').insertOne({ 제목 : 요청.body.title , 날짜 : 요청.body.date}, function(에러, 결과){
+//   db.collection('post').insertOne({
+//     제목 : 요청.body.title,
+//     날짜 : 요청.body.date
+//   }, function(에러, 결과){
 //     console.log('제목 : ' + 요청.body.title + ', 날짜 : ' + 요청.body.date);
 //   });
 // })
@@ -45,46 +47,90 @@
 //   });
 // });
 
+// const express = require('express');
+// const app = express();
+// const bodyParser = require('body-parser');
+// app.use(bodyParser.urlencoded({extended:true}));
+// const MongoClient = require('mongodb').MongoClient;
+// var db;
+// MongoClient.connect('mongodb+srv://qjin:Gorillaz-66@cluster0.xaphkkg.mongodb.net/?retryWrites=true&w=majority',function(오류,client){
+//   db = client.db('todoapp');
+//   app.listen(8000, function(){
+//     console.log('connected 8000!');
+//   });
+// });
+// app.post('/add',function(요청,응답){
+//   db.collection('posttest').insertOne({
+//     username : 요청.body.username, 
+//     gender : 요청.body.gender,
+//     e_id : 요청.body.e_id, 
+//     e_address : 요청.body.e_address 
+//   },function(에러, 결과){
+//     if(!에러){
+//       응답.send('전송되었습니다.');
+//       console.log(요청.body);
+//     }else{
+//       console.log(에러)
+//     }
+//   })
+// })
+// app.get('/',function(요청,응답){
+//   응답.sendFile(__dirname + '/index.html');
+// })
+// app.get('/signin',function(요청,응답){
+//   응답.sendFile(__dirname + '/signin.html');
+// })
+// app.get('/profile',function(요청,응답){
+//   db.collection('posttest').find().toArray(function(에러,결과){
+//     응답.render('profile.ejs',{profiles : 결과});  
+//   })
+// })
+
+
+
 const express = require('express');
 const app = express();
 
 const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({extended : true})); //****** */
+app.set('view engine', 'ejs');
 
 const MongoClient = require('mongodb').MongoClient;
 
-var db;
-MongoClient.connect('mongodb+srv://qjin:Gorillaz-66@cluster0.xaphkkg.mongodb.net/?retryWrites=true&w=majority',function(오류,client){
+var db ; 
+MongoClient.connect('mongodb+srv://qjin:Gorillaz-66@cluster0.xaphkkg.mongodb.net/?retryWrites=true&w=majority', function(에러, client){
   db = client.db('todoapp');
-  app.listen(8000, function(){
-    console.log('connected 8000!');
+  app.listen(8080, function(){
+    console.log('connext 8080!');
   });
 });
 
-app.post('/add',function(요청,응답){
-  db.collection('posttest').insertOne({username : 요청.body.username, gender : 요청.body.gender, e_id : 요청.body.e_id, e_address : 요청.body.e_address },function(에러, 결과){
-    if(!에러){
-      응답.send('전송되었습니다.');
-      console.log(요청.body);
-    }else{
-      console.log(에러)
-    }
+app.get('/',function(요청, 응답){
+  // 응답.sendFile('index.html');
+  console.log('index');
+})
+app.get('/signin', function(요청, 응답){
+  응답.sendFile('/signin.html');
+  console.log('/signin.html');
+})
+app.post('/add',function(요청, 응답){
+  db.collection('posttest').add().insertOne({
+    username : body.username,
+    gender : body.gender,
+    e_id : body.e_id,
+    e_address : body.e_address
+  },function(){
+    console.log('add요청')
   })
+  응답.send('요청완료..')
 })
-
-app.get('/',function(요청,응답){
-  응답.sendFile(__dirname + '/index.html');
-})
-
-app.get('/signin',function(요청,응답){
-  응답.sendFile(__dirname + '/signin.html');
-})
-
-app.get('/profile',function(요청,응답){
-
-  db.collection('posttest').find().toArray(function(에러,결과){
-    응답.render('profile.ejs',{profiles : 결과});  
-  })
-
+// app.get('/profile',function(요청, 응답){
   
-})
+//   //collecton 명이 posttest 인 db에서 모든 정보를 가져와주세요. 
+//   db.collection('posttest').???
+  
+  
+//   app.render('/profile.ejs', {});
+
+// })
+
