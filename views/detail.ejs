@@ -42,38 +42,9 @@
       </div>
     </nav>
 
-    <h6>todolist</h6>
-
-    <% for (var i = 0; i < todos.length ; i++){ %>
-      <ul class="list-group">
-        <li class="list-group-item"> 
-          <b>할 일 순서 : <%= todos[i]._id %></b> <button class="delete" data-id="<%= todos[i]._id %>">삭제</button>
-          <p>할 일 제목: <%= todos[i].제목 %> </p>
-          <p>할 일 마감날짜: <%= todos[i].날짜 %></p>
-        </li>
-      </ul>
-    <% }%>
+    <h4>상세페이지</h4>
 
 
-    <!-- ajax는 새로고침없이 서버와 통신할수있게 도와주는 js문법 (제이쿼리 사용.) -->
-    <script>
-
-      $('.delete').click(function(e){
-        var 글번호 = e.target.dataset.id;
-        var 지금누른거 = $(this);
-        $.ajax({
-          method : "DELETE", //서버에 delete요청
-          url : "/deleteTodo", // ex)/delete
-          data : {_id : 글번호} //어떤정보를 보낼건지 (지금 내가 클릭한 버튼의 id.)
-        }).done(function(결과){ //요청이 성공하면 (서버에서 200을 응답하면)아래를 실행
-          // 페이지 새로고침하거나 삭제버튼을 누른 요소를 안보이게 처리.
-          지금누른거.parent('li').fadeOut(250);
-        }).fail(function(xhr, 응답코드, 에러메세지){//요청이 실패하면(서버에서 200을 응답하면) 아래를 실행
-          console.log(xhr, 응답코드, 에러메세지);
-        });
-      });
-
-    </script>
     
 
 
