@@ -8,10 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
-
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-
-
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <title>Hello, world!</title>
   </head>
   <body>
@@ -46,10 +43,11 @@
     <% for(let i = 0; i < profiles.length; i ++){ %>
 
 
-      <table>
+      <table style="margin-bottom:10px">
         <tr>
           <td>이름</td>
           <td><input type="text" name="username" value="<%= profiles[i].username %>"> </td>
+          <td rowspan="3"><button class="deleteUser" data-id="<%= profiles[i]._id %>">삭제</button></td>
         </tr>
         <tr>
           <td>성별</td>
@@ -63,13 +61,12 @@
           <td>
             <input type="text" name="e_id" value=" <%= profiles[i].e_id %>">@
             <select name="e_address">
-              <option value="1" fncompare(1,1,selected)>naver</option>
-              <option value="2" fncompare(1,2,selected)>google</option>
+              <option value="1">naver</option>
+              <option value="2">google</option>
             </select>
           </td>
         </tr>
       </table>
-      <br>
     <% } %>
 
 
@@ -81,23 +78,27 @@
           };
         })
       })
-    </script>
+
+      $('.deleteUser').click(function(e){
+        var 글번호 = e.target.dataset.id;
+        var 선택한거 = $(this);
+        $.ajax({
+          method : 'DELETE',
+          url : '/deleteUser',
+          data : {_id : 글번호}
+        }).done(function(){
+          선택한거.parents('table').fadeOut(250);
+        }).fail(function(){
+          console.log('실패.')
+        })
+      })      
+
+</script>
     
 
 
 
-    <!-- Optional JavaScript; choose one of the two! -->
-
-    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
-    -->
 
   </body>
 </html>
