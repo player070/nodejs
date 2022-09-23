@@ -7,7 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="/public/main.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <style>
       p{margin: 0;}
@@ -16,44 +16,26 @@
   </head>
   <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="/">meta world</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/write">write</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/list">list</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/signin">sign in</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/profile">profiles</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <!-- ''nav.html 첨부'' -->
+    <%- include('nav.html')  %>
 
     <h6>todolist</h6>
 
-    <% for (var i = 0; i < todos.length ; i++){ %>
+    <div class="mt-4">
       <ul class="list-group">
+        <% for (var i = 0; i < todos.length ; i++){ %>
         <li class="list-group-item"> 
-          <b>할 일 순서 : <%= todos[i]._id %></b> <button class="delete" data-id="<%= todos[i]._id %>">삭제</button>
+          <b>할 일 순서 : <%= todos[i]._id %></b> 
           <p>할 일 제목: <%= todos[i].제목 %> </p>
           <p>할 일 마감날짜: <%= todos[i].날짜 %></p>
+          <button class="delete btn btn-danger" data-id="<%= todos[i]._id %>">삭제</button>
+          <button class="btn btn-link" onclick="location.href='./detail/<%= todos[i]._id %>'">자세히</button>
         </li>
+        <% }%>
       </ul>
-    <% }%>
-
+    </div>
+      
+    
 
     <!-- ajax는 새로고침없이 서버와 통신할수있게 도와주는 js문법 (제이쿼리 사용.) -->
     <script>

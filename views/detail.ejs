@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="/public/main.css">
     <style>
       p{margin: 0;}
     </style>
@@ -16,35 +17,21 @@
   </head>
   <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="/">meta world</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/write">write</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/list">list</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/signin">sign in</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/profile">profiles</a>
-          </li>
-        </ul>
+    <!-- ''nav.html 첨부'' -->
+    <%- include('nav.html')  %>
+
+  <div class="ml-4 mt-4">
+    <div class="card" style="width: 500px">
+      <div class="card-body">
+        <h5 class="card-title">할일</h5>
+        <h6 class="card-subtitle mb-2 text-muted"><%= data.제목 %></h6>
+        <p class="card-text"><%= data.날짜 %></p>
+        <a href="#" class="card-link">수정하기</a>
       </div>
-    </nav>
-
-    <h4>상세페이지</h4>
-
-
+    </div>
+  </div>
+    
+    
     
 
 

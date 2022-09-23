@@ -3,6 +3,11 @@ const app = express();
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended : true}));
 app.set('view engine', 'ejs');
+
+app.use('/public', express.static('public'));
+
+
+
 const MongoClient = require('mongodb').MongoClient;
 var db;
 
@@ -11,9 +16,9 @@ MongoClient.connect('mongodb+srv://qjin:Gorillaz-66@cluster0.xaphkkg.mongodb.net
   app.listen(8080, function(){console.log('8008 connected!');});
 });
 
-app.get('/',function(요청,응답){응답.sendFile(__dirname + '/index.html')});
-app.get('/signin',function(요청,응답){응답.sendFile(__dirname + '/signin.html')});
-app.get('/write',function(요청,응답){응답.sendFile(__dirname + '/write.html')});
+app.get('/',function(요청,응답){응답.render('index.ejs')});
+app.get('/signin',function(요청,응답){응답.render('signin.ejs')});
+app.get('/write',function(요청,응답){응답.render('write.ejs')});
 
 
 
@@ -25,7 +30,7 @@ app.post('/addtodo',function(요청,응답){
       db.collection('counter').updateOne({name:'할일수'},{ $inc : {totalTodo : 1}} , function(에러,결과){})
     });
   });
-  응답.sendFile(__dirname + '/write.html')
+  응답.render('write.ejs')
 });
 
 
@@ -36,7 +41,7 @@ app.post('/addProfile',function(요청,응답){
       db.collection('counter').updateOne({name:'회원수'},{ $inc : {totalUser : 1}},function(에러, 결과){});
     });
   });
-  응답.sendFile(__dirname + '/signin.html');
+  응답.render('signin.ejs');
 })
 
 
@@ -80,14 +85,55 @@ app.delete('/deleteUser',function(요청, 응답){
   })
 })
 
+app.get('/detail/:id',function(요청,응답){  
+                                                  //params.id : 파라미터중 id라는뜻
+  db.collection('post').findOne({_id : parseInt(요청.params.id)},function(에러, 결과){
+      응답.render('detail.ejs',{data : 결과});
+  });
+});
 
 
+app.get('/tweet',function(요청, 응답){
+  
+
+  db.collection('tweet').find().toArray(function(에러,결과){
+    응답.render('tweet.ejs',{tweetdata : 결과});
+  })
+
+});
 
 
-app.get('/detail/:id',function(요청,응답){
-  db.collection('post').findOne({_id : 1},function(에러, 결과){
-    console.log(결과)
+app.post('/addTweet',function(요청,응답){
+  db.collection('counter').findOne({name : '트윗수'},function(에러, 결과){
 
-    응답.render('detail.ejs',{데이터명 : 데이터정보})
+    var 총트윗수 = 결과.totalTweet;
+    db.collection('tweet').insertOne({_id : 총트윗수 + 1, tweet : 요청.body.tweet, date : 요청.body.date}, function(에러, 결과){
+      db.collection('counter').updateOne({name:'트윗수'},{$inc:{totalTweet : 1}},function(에러,결과){});
+    });
+
+    db.collection('tweet').find().toArray(function(에러,결과){
+      응답.render('tweet.ejs',{tweetdata : 결과});
+    });
+
+  });
+});
+
+
+app.delete('/deleteTweet',function(요청,응답){
+  요청.body._id = parseInt(요청.body._id);
+  db.collection('tweet').deleteOne({_id : 요청.body._id} ,function(에러, 결과){
+    if(에러){
+      응답.status(400).send({message : '실패'});
+    }else{
+      응답.status(200).send({message : '성공!'});
+    }
   })
 })
+
+// 트위터 자세히 보기 페이지
+
+app.get('/tweetdetail/:id',function(요청,응답){
+  db.collection('tweet').findOne({_id : parseInt(요청.params.id)},function(에러,결과){
+    응답.render('tweetdetail.ejs',{data : 결과});
+  });
+});
