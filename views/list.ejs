@@ -30,6 +30,7 @@
           <p>할 일 마감날짜: <%= todos[i].날짜 %></p>
           <button class="delete btn btn-danger" data-id="<%= todos[i]._id %>">삭제</button>
           <button class="btn btn-link" onclick="location.href='./detail/<%= todos[i]._id %>'">자세히</button>
+          <button class="edit btn-light" onclick="location.href='/editTodo/<%= todos[i]._id %>'">수정하기</button>
         </li>
         <% }%>
       </ul>

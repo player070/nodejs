@@ -4,6 +4,11 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended : true}));
 app.set('view engine', 'ejs');
 
+
+const methodoverride = require('method-override');
+app.use(methodoverride('_method'));
+
+
 app.use('/public', express.static('public'));
 
 
@@ -111,9 +116,10 @@ app.post('/addTweet',function(요청,응답){
       db.collection('counter').updateOne({name:'트윗수'},{$inc:{totalTweet : 1}},function(에러,결과){});
     });
 
-    db.collection('tweet').find().toArray(function(에러,결과){
-      응답.render('tweet.ejs',{tweetdata : 결과});
-    });
+    // db.collection('tweet').find().toArray(function(에러,결과){
+    //   응답.render('tweet.ejs',{tweetdata : 결과});
+    // });
+    응답.redirect('/tweet');
 
   });
 });
@@ -137,3 +143,23 @@ app.get('/tweetdetail/:id',function(요청,응답){
     응답.render('tweetdetail.ejs',{data : 결과});
   });
 });
+
+
+app.get('/editTodo/:id',function(요청,응답){
+  db.collection('post').findOne({_id : parseInt(요청.params.id)},function(에러,결과){
+    응답.render('editTodo.ejs',{data : 결과});
+  });
+});
+
+
+
+
+app.put('/editTodo',function(요청,응답){
+  // /editTodo경로로 put요청을 하면 
+  // 폼에 담긴 제목,날짜 데이터를 가지고 
+  // db.collection('post')에 업데이트
+  //                                                              $set = 오퍼레이터. 업데이트하거나 없으면 추가시켜줌.
+  db.collection('post').updateOne({_id : parseInt(요청.body.id)},{$set : {제목 : 요청.body.title, 날짜 : 요청.body.date}},function(에러,결과){
+     응답.redirect('/list');
+  })
+})
