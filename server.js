@@ -65,7 +65,6 @@ app.get('/profile',function(요청,응답){
 });
 
 app.delete('/deleteTodo',function(요청, 응답){
-  console.log(요청.body);
   요청.body._id = parseInt(요청.body._id);
   //요청.body에 담긴 게시물 번호에 따라 db에서 게시물 삭제 
   db.collection('post').deleteOne(요청.body, function(에러, 결과){
@@ -151,9 +150,6 @@ app.get('/editTodo/:id',function(요청,응답){
   });
 });
 
-
-
-
 app.put('/editTodo',function(요청,응답){
   // /editTodo경로로 put요청을 하면 
   // 폼에 담긴 제목,날짜 데이터를 가지고 
@@ -161,5 +157,27 @@ app.put('/editTodo',function(요청,응답){
   //                                                              $set = 오퍼레이터. 업데이트하거나 없으면 추가시켜줌.
   db.collection('post').updateOne({_id : parseInt(요청.body.id)},{$set : {제목 : 요청.body.title, 날짜 : 요청.body.date}},function(에러,결과){
      응답.redirect('/list');
+  })
+})
+
+app.get('/editTweet/:id',function(요청,응답){
+  db.collection('tweet').findOne({_id : parseInt(요청.params.id)},function(에러,결과){
+    응답.render('editTweet.ejs',{data : 결과});
+  })
+
+})
+
+app.put('/editTweet',function(요청,응답){
+  db.collection('tweet').updateOne({_id : parseInt(요청.body.id)},{$set : {tweet : 요청.body.tweet}},function(에러,결과){
+    응답.redirect('/tweet');
+  });
+});
+  
+
+app.put('/editUser', function(요청,응답){
+  db.collection('posttest').updateOne({_id : parseInt(요청.body.id)},
+  {$set : {username : 요청.body.username, gender : 요청.body.gender, e_id : 요청.body.e_id, e_address : 요청.body.e_address}},
+  function(에러,결과){
+    응답.redirect('/profile');
   })
 })

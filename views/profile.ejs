@@ -14,32 +14,38 @@
 
 
     <% for(let i = 0; i < profiles.length; i ++){ %>
-
-
-      <table style="margin-bottom:10px">
-        <tr>
-          <td>이름</td>
-          <td><input type="text" name="username" value="<%= profiles[i].username %>"> </td>
-          <td rowspan="3"><button class="deleteUser" data-id="<%= profiles[i]._id %>">삭제</button></td>
-        </tr>
-        <tr>
-          <td>성별</td>
-          <td>
-            <input type="radio" name="gender<%= i %>" value="m" aria-label="<%= profiles[i].gender %>" >남자 / 
-            <input type="radio" name="gender<%= i %>" value="f" aria-label="<%= profiles[i].gender %>" >여자 
-          </td>
-        </tr>
-        <tr>
-          <td>이메일주소</td>
-          <td>
-            <input type="text" name="e_id" value=" <%= profiles[i].e_id %>">@
-            <select name="e_address">
-              <option value="1">naver</option>
-              <option value="2">google</option>
-            </select>
-          </td>
-        </tr>
-      </table>
+      <form action="/editUser?_method=PUT" method="POST">
+        <table style="margin-bottom:10px">
+          <tr>
+            <td>이름</td>
+            <td>
+              <input type="text" name="username" value="<%= profiles[i].username %>"> 
+              <input type="hidden" name="id" value="<%=profiles[i]._id%>">
+            </td>
+            <td rowspan="3">
+              <button class="btn btn-link" type="submit">수정</button>
+              <button class="deleteUser btn" data-id="<%= profiles[i]._id %>">삭제</button>
+            </td>
+          </tr>
+          <tr>
+            <td>성별</td>
+            <td>
+              <input type="radio" name="gender<%= i %>" value="m" aria-label="<%= profiles[i].gender %>" >남자 / 
+              <input type="radio" name="gender<%= i %>" value="f" aria-label="<%= profiles[i].gender %>" >여자 
+            </td>
+          </tr>
+          <tr>
+            <td>이메일주소</td>
+            <td>
+              <input type="text" name="e_id" value="<%= profiles[i].e_id %>">@
+              <select name="e_address">
+                <option value="1">naver</option>
+                <option value="2">google</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+      </form>
     <% } %>
 
 
